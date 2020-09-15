@@ -1,0 +1,52 @@
+d---
+title: "Week 1"
+author: "Wanjiku Ngare"
+date: "9/13/2020"
+output: html_document
+---
+
+```{r load libraries}
+library(tidycensus)
+library(tidyverse)
+
+person_vars_2018 <- pums_variables %>%
+  distinct(year, survey, var_code, 
+           var_label, data_type, level) %>%
+  filter(level == "person", year == 2018, survey == "acs1")
+```
+
+## ACLS 2018 Data - The impact of partnership and income on public assistance seeking behavior and attainement of people in the state of Washington who have children 
+
+After looking through the available variables in 'person_vars_2018' , I've decided to complete a person-level analysis using the following 5 Variables:
+
+1. Income (PINCP) (continuous)
+2. Presence and age of own children (PAOC) (categorical)
+3. Sex (SEX) (categorical)
+4. Year last married (MARHYP) (continuous)
+5. Public assistance income past 12 months (PAP) (continuous)
+
+And I want my survey to include all people in the state of Washington who have children of their own (everyone with a value greater than zero for presence and age of children of their own). 
+
+```{r load person-level data, results = 'hide'}
+person_data <- get_pums(variables = c("PAOC", 
+                                      "SEX", 
+                                      "PINCP", 
+                                      "MARHYP", 
+                                      "PAP"),
+                        state = "WA", 
+                        year = 2018, 
+                        survey = "acs1",
+                        recode = TRUE) %>%
+  filter(PAOC > 0) %>%
+  select(PAOC_label, SEX_label, PINCP, MARHYP, PAP)
+```
+
+```{r show person-level data}
+person_data <- person_data[person_data$PAOC_label != "N/A (male/female under 16 years old/GQ)", ] 
+person_data <- person_data[person_data$PAOC_label != "Females with no own children", ] 
+unique(person_data$PAOC_label)
+```
+
+### Description of  data
+
+There are 76225 total observations for 5 variables (PAOC, SEX, PINCP, MARHYP, PAP - see above descriptive label). However, of the variables we want to observe for this analysis, there are 7294. The goal of the analysis is to understand if income and having a partner or co-parent(s) impacts if and how much people who are parents access public assistance income. Partnership or ca-parenting is indicated by 'Year Last Married' for the purposes of the census data which does not collect data about other forms of partnership or co-parenting.  
