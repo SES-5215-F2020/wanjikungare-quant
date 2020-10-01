@@ -1,0 +1,219 @@
+---
+title: "Quant_Assignment 2"
+author: "Wanjiku Ngare"
+date: "9/28/2020"
+output: html_document
+---
+
+```{r load libraries}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+person_data <- read_csv("people.csv") 
+attach(person_data)
+```
+
+
+```{r}
+PINCP_summary<- summary(person_data$PINCP)
+
+PINCP_summary
+```
+
+```{r}
+PINCP_summary["Mean"]
+```
+
+```{r}
+PINCP_summary["3rd Qu."]
+```
+
+```{r}
+mean(person_data$PINCP)
+```
+
+```{r}
+median(person_data$PINCP)
+```
+
+```{r}
+quantile(person_data$PINCP)
+```
+
+```{r}
+quantile(person_data$PINCP)["25%"]
+
+```
+
+```{r}
+sd(person_data$PINCP)
+```
+
+```{r}
+conf_int <- t.test(person_data$PINCP)
+
+conf_int
+```
+
+```{r}
+ggplot(person_data, aes(x = PINCP)) +
+  geom_histogram() +
+  xlim(0,60000) +
+  ylim(0,300)
+```
+
+```{r}
+ggplot(person_data, aes(x = PINCP)) +
+  geom_histogram() +
+  xlim(60000,120000)
+```
+
+```{r}
+ggplot(person_data, aes(x = PINCP)) +
+  geom_histogram() +
+  xlim(0,800000)
+```
+
+
+```{r} 
+unique(person_data$PAOC_label)
+```
+
+```{r} 
+table(person_data$PAOC_label)
+```
+```{r} 
+table(person_data$PAOC_label) / sum(table(person_data$PAOC_label))
+```
+```{r} 
+mean(person_data$PAOC_label == "Females with own children 6 to 17 years only")
+```
+```{r} 
+t.test (person_data$PAOC_label == "Females with own children 6 to 17 years only")
+options(scipen= 999)
+```
+```{r} 
+summary(PINCP)
+```
+
+```{r} 
+paste("The sample mean for income is", 
+      prettyNum(mean(PINCP), digits = 0), "dollars.")
+```
+
+```{r} 
+paste("The sample median for income is", 
+      prettyNum(median(PINCP), digits = 0), "dollars.")
+```
+
+```{r} 
+paste("The sample standard deviation for income is", 
+      prettyNum(sd(PINCP), digits = 0), "dollars.")
+```
+
+```{r} 
+paste("The sample interquartile range for income is", 
+      quantile(PINCP)["25%"], "to", quantile(PINCP)["75%"], "dollars") 
+```
+
+```{r} 
+pop_mean <- t.test(PINCP)
+pop_mean
+```
+
+```{r}
+paste("The 95-percent confidence interval for the population mean is",
+      prettyNum(pop_mean$conf.int[1], digits = 0), "to",
+      prettyNum(pop_mean$conf.int[2], digits = 0), "dollars.")
+```
+
+```{r}
+#Histogram for Income of Womxn in Seattle, with children
+hist <- ggplot(person_data, aes(x = PINCP)) +
+  geom_histogram()
+hist
+```
+```{r}
+hist +
+  theme_bw() +
+  scale_x_continuous(name = "Income of Womxn in Seattle, with chidlren") +
+  scale_y_continuous(name =  "Number of womxn in sample") +
+  annotate("text", x = 5000, y =5000, size = 3,
+  label = paste("Population mean (95% confidence):",
+  prettyNum(pop_mean$conf.int[2], digits = 0),
+                         "dollars.",
+                         "\nSample mean:", 
+                         prettyNum(mean(PINCP), digits = 0), "dollars",
+                         "\nSample median:",
+                         prettyNum(median(PINCP), digits = 0), "dollars",
+                         "\nSample standard deviation:",
+                         prettyNum(sd(PINCP), digits = 0), "dollars", 
+                         "\nSample interquartile range:",
+                         prettyNum(quantile(PINCP)["25%"], digits = 0),
+                         "to",
+                         prettyNum(quantile(PINCP)["75%"], digits = 0),
+                         "dollars"),
+           hjust = 0, vjust = 1) 
+```
+
+```{r}
+children <- unique(PAOC_label)
+children
+```
+
+```{r}
+ownchildren_all <- t.test(PAOC_label == children[1])
+ownchildren_young <- t.test(PAOC_label == children[2])
+ownchildren_older <- t.test(PAOC_label == children[3])
+shares <- tibble(Children = c("Own children all",
+                            "Own children young",
+                            "Own children older"),
+                 `Share` = c(ownchildren_all$estimate, 
+                             ownchildren_young$estimate,
+                            ownchildren_older$estimate),
+                 Low = c(ownchildren_all$conf.int[1],
+                         ownchildren_young$conf.int[1],
+                         ownchildren_older$conf.int[1]),
+                 High = c(ownchildren_all$conf.int[2],
+                         ownchildren_young$conf.int[2],
+                         ownchildren_older[2]))
+knitr::kable(shares, caption = "Proportions and 95-percent confidence intervals")
+```
+```{r}
+ggplot(shares, aes(x = Children, y = Share, ymin = Low, ymax = High)) +
+  geom_bar(stat = "identity") +
+  geom_errorbar(width = 0.5) +
+  theme_bw() +
+  scale_x_discrete(labels = c("Own children all", 
+                            "Own children young", 
+                            "Own children older")) +
+  scale_y_continuous(name = "Share of own child population (error bars represent\n 95-percent confidence interval)",
+                     breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+                     labels = c("0", "10%", "20%", "30%", "40%", "50%"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
