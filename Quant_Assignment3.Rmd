@@ -1,0 +1,120 @@
+---
+title: "Quant_Assignment3"
+author: "Wanjiku Ngare"
+date: "10/1/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+person_data <- read_csv("people.csv") %>%
+  mutate(PAOC_label = case_when(
+    PAOC_label== "Females with own children 6 to 17 years only"~"Older Children",
+    PAOC_label== "Females with own children under 6 years and 6 to 17 years" ~ "All Children",
+    PAOC_label=="Females with own children under 6 years only"~"Younger Children"))%>%
+   
+  mutate(year_married = case_when(
+    MARHYP > 1935 & MARHYP < 1951 ~ "1936-1950",
+
+    MARHYP > 1950 & MARHYP < 1971 ~ "1951-1970",
+
+    MARHYP > 1970 & MARHYP < 1991 ~ "1971-1990",
+
+    MARHYP > 1990 & MARHYP < 2011 ~ "1991-2010",
+
+    MARHYP > 2010 & MARHYP < 2019 ~ "2011-2018"))%>%
+  
+select(year_married, PAOC_label, SEX_label, PAP, PINCP) 
+```
+
+```{r}
+correlation <- cor.test(person_data$PINCP, person_data$PAP)
+options(scipen = 999)
+correlation
+```
+
+```{r}
+ggplot(person_data, aes(x = PINCP, y = PAP)) +
+  geom_point(size = 0.5, alpha = 0.25, position = "jitter") +
+  geom_smooth() +
+  theme_bw() +
+  scale_x_continuous(name = "Income",
+  limits = c(0, 200000),
+                     breaks = seq(0, 200000, by = 25000),  
+   labels = paste("$",
+     prettyNum(seq(0, 200000, by = 25000),
+                                              big.mark = ",")))+
+  scale_y_continuous(name = "Public Assistance", 
+                     breaks = seq(0, 25000, by = 2000),
+                     labels = paste("$", 
+                                    prettyNum(seq(0, 25000, by = 2000),
+                                              big.mark = ","))) +
+  annotate(geom = "text", x = 5000, y = 21000, 
+           label = paste("Correlation (95-percent confidence):",
+                         prettyNum(correlation$conf.int[1], digits = 2), 
+                         "to",
+                         prettyNum(correlation$conf.int[2], digits = 2)),
+           hjust = 0)
+```
+#The above is a Pearson's Correlation test between the variables: Public Assistance (PAP) and Income (PINCP) of women in Seattle 'with own" children between the ages of 6 and 17 years only, under 6 years only, and under 6 years and 6 to 17 years. The test shows a low p-value of 0.00000000001004 suggesting, and a high correlation of 0.4678468 between the two values. In layman's  terms, the low p-value suggests that there's a very small chance that income doesn't impact public assistance.
+
+```{r}
+anova <- aov(PINCP ~ PAOC_label, data = person_data)
+
+summary(anova)
+```
+
+#This suggest that with a 95% confidence interval, there is a significant association between income and number of own children for women in Seattle. 
+
+```{r}
+differences <- TukeyHSD(anova)
+
+as_tibble(cbind(pair = row.names(differences$PAOC_label),
+                differences$PAOC_label))
+```
+
+#Anova Test between number of own children a female person in Seattle has, and their income
+```{r}
+ggplot(person_data, aes(x = PAOC_label, y = PINCP)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_x_discrete(name = "Number of Own Children") +
+  scale_y_continuous(name = "Annual Income", 
+                     breaks = seq(0, 800000, by = 50000),
+                     labels = paste("$", 
+                                    prettyNum(seq(0, 800000, by = 50000),
+                                              big.mark = ","))) 
+```
+
+#Chisquare test between number of own children a female in Seattle has, and years married 
+#I was unable to run the chi.square test because I kept getting this error:
+#Error in chisq.test(person_data$PAOC_label, person_data$years_married == : 'x' and 'y' must have the same length
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
