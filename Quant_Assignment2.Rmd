@@ -178,7 +178,7 @@ shares <- tibble(Children = c("Own children all",
                          ownchildren_older$conf.int[1]),
                  High = c(ownchildren_all$conf.int[2],
                          ownchildren_young$conf.int[2],
-                         ownchildren_older[2]))
+                         ownchildren_older$conf.int[2]))
 knitr::kable(shares, caption = "Proportions and 95-percent confidence intervals")
 ```
 ```{r}
@@ -193,7 +193,6 @@ ggplot(shares, aes(x = Children, y = Share, ymin = Low, ymax = High)) +
                      breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5),
                      labels = c("0", "10%", "20%", "30%", "40%", "50%"))
 ```
-
 
 
 
