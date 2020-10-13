@@ -1,0 +1,83 @@
+---
+title: "Assignment 4"
+author: "Wanjiku Ngare"
+date: "10/8/2020"
+output: html_document
+---
+
+```{r} 
+library(tidyverse)
+```
+
+```{r}
+person_data <- read_csv("people.csv") %>%
+   mutate(PAOC_label = case_when(
+    PAOC_label== "Females with own children 6 to 17 years only"~"Older Children",
+    PAOC_label== "Females with own children under 6 years and 6 to 17 years"~"All Children",
+    PAOC_label=="Females with own children under 6 years only"~"Younger Children"))%>%
+   
+  mutate(year_married = case_when(
+    MARHYP > 1935 & MARHYP < 1951 ~ "1936-1950",
+
+    MARHYP > 1950 & MARHYP < 1971 ~ "1951-1970",
+
+    MARHYP > 1970 & MARHYP < 1991 ~ "1971-1990",
+
+    MARHYP > 1990 & MARHYP < 2011 ~ "1991-2010",
+
+    MARHYP > 2010 & MARHYP < 2019 ~ "2011-2018"))%>%
+  
+select(year_married, PAOC_label, SEX_label, PAP, PINCP) 
+```
+
+_For this linear regression, I am testing how much years married, number of children (PAOC_label), and income (PINCP) impact public assistance income received in the past 12 months (PAP)._
+
+```{r}
+model <- lm(PAP ~ year_married + PAOC_label + PINCP,
+            data = person_data)
+
+summary(model)
+```
+
+
+
+**Regression Interpretation**
+
+The R  value for this dataframe is o.00607 meaning that this model explains less than 1% of the variation in public assistance income received in the past 12 months by Seattle-based women with children. None of the coefficient values for my independent variables displays a significant relationship when predicting public assistance income received in  the past 12 months, but it is helpful to consider one that could, if I subdivided the groups within it more discretely - income. 
+
+The coefficient for annual income is -2.065e-04, which is not statistically significant. This is the closest coefficient to something statistically significant that I have in this dataframe. But my data includes very high incomes (up to hundreds of thousands and millions of dollars annually). I suspect that if I had subdivided the data for income to include several low and lower-income groups, I might find more significant relationships when predicting public assistance income received in the past 12 months, with income as an independent variable. 
+
+I am somewhat surprised that I did not find more significant relationships with number of own children. My hypothesis here is that these relationships and their potential interraction with income are also being 'hidden' by the above-mentioned phenomenon. I suspect that is  the case with the variables related to years of marriage as well. I hope to explore this in an updated version of this assignment. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
