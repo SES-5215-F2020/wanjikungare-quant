@@ -415,24 +415,24 @@ summary(model)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-##  -302.8   -97.6   -58.8   -46.4 21401.7 
+##  -362.6  -132.9   -76.7   -57.2 21347.6 
 ## 
 ## Coefficients:
 ##                              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                 3.028e+02  3.386e+01   8.941  &lt; 2e-16 ***
-## year_married1951-1970      -2.491e+02  5.503e+02  -0.453   0.6508    
-## year_married1971-1990      -1.131e+02  5.829e+01  -1.940   0.0524 .  
-## year_married1991-2010      -2.000e+02  3.181e+01  -6.286 3.44e-10 ***
-## year_married2011-2018      -1.760e+02  3.453e+01  -5.097 3.54e-07 ***
-## PAOC_labelOlder Children   -5.002e+01  2.386e+01  -2.097   0.0361 *  
-## PAOC_labelYounger Children -4.400e+01  2.873e+01  -1.531   0.1257    
-## PINCP                      -2.065e-04  1.589e-04  -1.299   0.1938    
+## (Intercept)                 3.629e+02  4.111e+01   8.830  &lt; 2e-16 ***
+## year_married1951-1970      -2.714e+02  6.123e+02  -0.443  0.65766    
+## year_married1971-1990      -9.337e+01  7.131e+01  -1.309  0.19046    
+## year_married1991-2010      -2.007e+02  3.810e+01  -5.268 1.43e-07 ***
+## year_married2011-2018      -1.794e+02  4.131e+01  -4.343 1.43e-05 ***
+## PAOC_labelOlder Children   -8.303e+01  3.071e+01  -2.704  0.00688 ** 
+## PAOC_labelYounger Children -6.354e+01  3.659e+01  -1.736  0.08256 .  
+## PINCP                      -4.881e-04  1.883e-04  -2.591  0.00958 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 777 on 7286 degrees of freedom
-## Multiple R-squared:  0.007024,   Adjusted R-squared:  0.00607 
-## F-statistic: 7.363 on 7 and 7286 DF,  p-value: 7.747e-09</code></pre>
+## Residual standard error: 864.4 on 5860 degrees of freedom
+## Multiple R-squared:  0.008784,   Adjusted R-squared:  0.0076 
+## F-statistic: 7.418 on 7 and 5860 DF,  p-value: 6.622e-09</code></pre>
 <p><strong>Regression Interpretation</strong></p>
 <p>The R value for this dataframe is o.00607 meaning that this model explains less than 1% of the variation in public assistance income received in the past 12 months by Seattle-based women with children. None of the coefficient values for my independent variables displays a significant relationship when predicting public assistance income received in the past 12 months, but it is helpful to consider one that could, if I subdivided the groups within it more discretely - income.</p>
 <p>The coefficient for annual income is -2.065e-04, which is not statistically significant. This is the closest coefficient to something statistically significant that I have in this dataframe. But my data includes very high incomes (up to hundreds of thousands and millions of dollars annually). I suspect that if I had subdivided the data for income to include several low and lower-income groups, I might find more significant relationships when predicting public assistance income received in the past 12 months, with income as an independent variable.</p>
