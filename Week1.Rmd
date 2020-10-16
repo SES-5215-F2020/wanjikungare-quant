@@ -37,14 +37,13 @@ person_data <- get_pums(variables = c("PAOC",
                         year = 2018, 
                         survey = "acs1",
                         recode = TRUE) %>%
-  filter(PAOC > 0) %>%
+  filter(PAOC > 0,
+         PAOC_label != "N/A (male/female under 16 years old/GQ)",
+         PAOC_label != "Females with no own children") %>%
   select(PAOC_label, SEX_label, PINCP, MARHYP, PAP)
 ```
 
-```{r show person-level data}
-person_data <- person_data[person_data$PAOC_label != "N/A (male/female under 16 years old/GQ)", ] 
-person_data <- person_data[person_data$PAOC_label != "Females with no own children", ] 
-unique(person_data$PAOC_label)
+
 ```
 
 ### Description of  data
