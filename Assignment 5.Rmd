@@ -48,7 +48,7 @@ model1 <- lm(PAP ~ marriage_status + PINCP + PAOC_label,
 summary(model1)
 ```
 
-With a multipe r-squared of 0.009, the above results do not appear to be statiscally significant.  
+With a multipe r-squared of 0.1163, the above independent  variables explain approximately 11.63% of  the dependent variable, public assistance income received in the last 12-months. With respect to the dependent variable of 'receiving public assistance in the last 12 months (PAP) and with a comparative variable of 'No children', four independent variables appear to be significant: at a 99% confidence interval - Income, Having Both  children (older and younger; at a 95% confidence interval - Having Older Children and Having Younger Children. 
 
 *A log transformation*
 
@@ -87,32 +87,63 @@ ggplot(ModelFit, aes(x = model, y = R_square)) +
 
 In this case, Model 3 appears to be the best fit
 
+Try number 1: I I'm getting an error that I can't seem to figure out
 ```{r}
-coeff_names <- c("Marriage status - Divorced\n(compared to never married)" = "marriage_status",
-                 "Marriage status - Married\n(compared to never married)" = "marriage_status",
-                 "Marriage status - Separated\n(compared to never married)" = "marriage_status",
-                 "Marriage status - Widowed\n(compared to never married)" = "marriage_status",
-                 "Annual income" = "PINCP",
-                 "Own children - Both/n(compared to no children)" = "PAOC_label",
-                 "Own children - Older/n(compared to no children)" = "PAOC_label",
-                 "Own children - Younger/n(compared to no children)" = "PAOC_label",
+coeff_names <- c("Marriage status\n(compared to never married)" = "marriage_status",
+                 "Annual income" = 
+                   "PINCP",
                  "Annual income\n(log-transformed)" = 
                    "log(PINCP)",
-                "Interaction:\nBoth Children and log-transformed income" = "log(PINCP):PAOC_label",
-                "Interaction:\nOlder Children and log-transformed income"="log(PINCP):PAOC_label",
-                "Interaction:\nYounger Children and log-transformed income"="log(PINCP):PAOC_label",
-                "Interaction:\nDivorced and Both Children = marriage_status:PAOC_label",
-                "Interaction:\nMarried and Both Children = marriage_status:PAOC_label",
-                "Interaction:\nSeparated and Both Children = marriage_status:PAOC_label",
-                "Interaction:\nWidowed and Both Children = marriage_status:PAOC_label",
-                "Interaction:\nDivorced and Older Children = marriage_status:PAOC_label",
-                "Interaction:\nMarried and Older Children = marriage_status:PAOC_label",
-                "Interaction:\nSeparated and Older Children = marriage_status:PAOC_label",
-                "Interaction:\nWidowed and Older Children = marriage_status:PAOC_label",
-                "Interaction:\nDivorced and Younger Children = marriage_status:PAOC_label",
-                "Interaction:\nMarried and Younger Children = marriage_status:PAOC_label",
-                "Interaction:\nSeparated and Younger Children = marriage_status:PAOC_label",
-                "Interaction:\nWidowed and Younger Children = marriage_status:PAOC_label")
+                 "Own children\n(compared to no children)" = "PAOC_label",
+                "Interaction:\nOlder Children and log-transformed income"="log(PINCP):PAOC_labelOlder children",
+                "Interaction:\nYounger Children and log-transformed income"="log(PINCP):PAOC_labelYounger children",
+                "Interaction:\nDivorced and Both Children" = "marriage_statusDivorced:PAOC_labelBoth children",
+                "Interaction:\nMarried and Both Children" = "marriage_statusMarried:PAOC_labelBoth children",
+                "Interaction:\nSeparated and Both Children" = "marriage_statusSeparated:PAOC_labelBoth children",
+                "Interaction:\nWidowed and Both Children" = "marriage_statusWidowed:PAOC_labelBoth children",
+                "Interaction:\nDivorced and Older Children" = "marriage_statusDivorced:PAOC_labelOlder children",
+                "Interaction:\nMarried and Older Children" = "marriage_statusMarried:PAOC_labelOlder children",
+                "Interaction:\nSeparated and Older Children" = "marriage_statusSeparated:PAOC_labelOlder children",
+                "Interaction:\nWidowed and Older Children" = "marriage_statusWidowed:PAOC_labelOlder children",
+                "Interaction:\nDivorced and Younger Children" = "marriage_statusDivorced:PAOC_labelYounger children",
+                "Interaction:\nMarried and Younger Children" = "marriage_statusMarried:PAOC_labelYounger children",
+                "Interaction:\nSeparated and Younger Children" = "marriage_statusSeparated:PAOC_labelYounger children",
+                "Interaction:\nSeparated and Younger Children" = "marriage_statusWidowed:PAOC_labelYounger children")
+
+export_summs(model1, model3, 
+             error_format = "(p = {p.value})",
+             error_pos = "same",
+             model.names = c("Initial model", "Preferred model"),
+             coefs = coeff_names)
+```
+Try number 2: I attempted to edit the code and still got the same error
+```{r}
+coeff_names <- c("Divorced\n(compared to never married)" = "marriage_statusDivorced",
+                 "Married\n(compared to never married)" = "marriage_statusMarried",
+                 "Separated\n(compared to never married)" = "marriage_statusSeparated",
+                 "Widowed\n(compared to never married)" = "marriage_statusWidowed",
+                 "Annual income" = 
+                   "PINCP",
+                 "Annual income\n(log-transformed)" = 
+                   "log(PINCP)",
+                 "Own children Both\n(compared to no children)" = "PAOC_labelBoth children",
+                 "Own children Older\n(compared to no children)" = "PAOC_labelOlder children",
+                 "Own children Younger\n(compared to no children)" = "PAOC_labelYounger children",
+                "Interaction:\nBoth Children and log-transformed income" = "log(PINCP):PAOC_labelBoth children",
+                "Interaction:\nOlder Children and log-transformed income"="log(PINCP):PAOC_labelOlder children",
+                "Interaction:\nYounger Children and log-transformed income"="log(PINCP):PAOC_labelYounger children",
+                "Interaction:\nDivorced and Both Children" = "marriage_statusDivorced:PAOC_labelBoth children",
+                "Interaction:\nMarried and Both Children" = "marriage_statusMarried:PAOC_labelBoth children",
+                "Interaction:\nSeparated and Both Children" = "marriage_statusSeparated:PAOC_labelBoth children",
+                "Interaction:\nWidowed and Both Children" = "marriage_statusWidowed:PAOC_labelBoth children",
+                "Interaction:\nDivorced and Older Children" = "marriage_statusDivorced:PAOC_labelOlder children",
+                "Interaction:\nMarried and Older Children" = "marriage_statusMarried:PAOC_labelOlder children",
+                "Interaction:\nSeparated and Older Children" = "marriage_statusSeparated:PAOC_labelOlder children",
+                "Interaction:\nWidowed and Older Children" = "marriage_statusWidowed:PAOC_labelOlder children",
+                "Interaction:\nDivorced and Younger Children" = "marriage_statusDivorced:PAOC_labelYounger children",
+                "Interaction:\nMarried and Younger Children" = "marriage_statusMarried:PAOC_labelYounger children",
+                "Interaction:\nSeparated and Younger Children" = "marriage_statusSeparated:PAOC_labelYounger children",
+                "Interaction:\nSeparated and Younger Children" = "marriage_statusWidowed:PAOC_labelYounger children")
 
 export_summs(model1, model3, 
              error_format = "(p = {p.value})",
@@ -121,13 +152,115 @@ export_summs(model1, model3,
              coefs = coeff_names)
 ```
 
+```{r}
+coeff_desc <- c("Divorced\n(compared to never married)" = 
+                  "marriage_statusDivorced",
+                 "Married\n(compared to never married)" = 
+                  "marriage_statusMarried",
+                 "Separated\n(compared to never married)" = 
+                  "marriage_statusSeparated",
+                 "Widowed\n(compared to never married)" = 
+                  "marriage_statusWidowed",
+                "Having both children AND doubling income" = 
+                  "log(PINCP):PAOC_labelBothchildren",
+                 "Having older children AND doubling income" = 
+                  "log(PINCP):PAOC_labelOlderchildren",
+                "Having younger children AND doubling income" = 
+                  "log(PINCP):PAOC_labelYoungerchildren",
+                 "Being divorced AND having both children" = 
+                         "marriage_statusDivorced:PAOC_labelBoth children",
+                "Being married AND having both children" = 
+                         "marriage_statusMarried:PAOC_labelBoth children",
+                "Being separated AND having both children" = 
+                         "marriage_statusSeparated:PAOC_labelBoth children",
+                "Being widowed AND having both children" = 
+                         "marriage_statusWidowed:PAOC_labelBoth children",
+                 "Being divorced AND having Older children" = 
+                         "marriage_statusDivorced:PAOC_labelOlder children",
+                "Being married AND having older children" = 
+                         "marriage_statusMarried:PAOC_labelOlder children",
+                "Being separated AND having older children" = 
+                         "marriage_statusSeparated:PAOC_labelOlder children",
+                "Being widowed AND having older children" = 
+                         "marriage_statusWidowed:PAOC_labelOlder children",
+                 "Being divorced AND having younger children" = 
+                         "marriage_statusDivorced:PAOC_labelYounger children",
+                "Being married AND having younger children" = 
+                         "marriage_statusMarried:PAOC_labelYounger children",
+                "Being separated AND having younger children" = 
+                         "marriage_statusSeparated:PAOC_labelYounger children",
+                "Being widowed AND having younger children" = 
+                         "marriage_statusWidowed:PAOC_labelYounger children")
+
+plot_coefs(model3, 
+           coefs = coeff_desc,
+           plot.distributions = TRUE,
+           rescale.distributions = TRUE) +
+  scale_x_continuous(name = "Effect on women in WA receiving public assistance income- past 12 months")
+```
+
+```{r} 
+interact_plot(model3, pred = PINCP, modx = PAOC_label, interval = TRUE) +
+  scale_x_continuous(name = "Annual income (thousands)",
+                     limits = c(0, 500000),
+                     breaks = breaks <- seq(0, 500000, by = 50000),
+                     labels = paste("$", 
+                                    prettyNum(breaks/1000, big.mark = "'"),
+                                    sep = "")) +
+  scale_y_continuous(name = "Age of children at home",
+                     breaks = seq(0, 0, by = 0)) +
+  scale_color_discrete(name = "") +
+  scale_linetype_discrete(name = "") +
+  scale_fill_discrete(name = "") 
+```
+
+```{r}
+interact_plot(model3, pred = PINCP, modx = PAOC_label, interval = TRUE) +
+  scale_x_continuous(name = "Income (thousands)") +
+  scale_y_continuous(name = "Public Assistance received (thousands)",
+                     breaks = seq(0, 15000, by = 5000)) +
+  scale_color_discrete(name = "") +
+  scale_linetype_discrete(name = "") +
+  scale_fill_discrete(name = "") 
+```
+
+```{r}
+interact_plot(model3, pred = PINCP, modx = marriage_status, interval = TRUE) +
+  scale_x_continuous(name = "Income (thousands)") +
+  scale_y_continuous(name = "Public Assistance received (thousands)",
+                     breaks = seq(0, 15000, by = 5000)) +
+  scale_color_discrete(name = "") +
+  scale_linetype_discrete(name = "") +
+  scale_fill_discrete(name = "") 
+```
 
 
+```{r} 
+interact_plot(model3, pred = PINCP, modx = marriage_status, interval = TRUE) +
+  scale_x_continuous(name = "Annual income (thousands)",
+                     limits = c(0, 500000),
+                     breaks = breaks <- seq(0, 500000, by = 50000),
+                     labels = paste("$", 
+                                    prettyNum(breaks/1000, big.mark = "'"),
+                                    sep = "")) +
+  scale_y_continuous(name = "Marriage status",
+                     breaks = seq(0, 0, by = 0)) +
+  scale_color_discrete(name = "") +
+  scale_linetype_discrete(name = "") +
+  scale_fill_discrete(name = "") 
+```
 
-
-
-
-
+```{r}
+cat_plot(model3, pred = marriage_status, modx = PAOC_label, interval = TRUE) +
+ scale_x_discrete(name ="Marriage Status",
+                    labels = c("Never Married", "Divorced", "Married",
+                               "Separated", "Widowed")) +
+  scale_y_continuous(name = "Public Assistance Income",
+                     breaks = seq(0, 15000, by = 5000)) +
+  scale_color_discrete(name = "") +
+  scale_linetype_discrete(name = "") +
+  scale_fill_discrete(name = "") 
+```
 
 
 
